@@ -15,17 +15,11 @@
 		}
 
 		a { color: white; text-decoration: underline; }
+		a:hover { color: white; text-decoration: overline; }
 
     #app {
       margin: 0.5em 0 0 0.5em;
     }
-
-		#pi {
-			font-size: 500px;
-			position: fixed;
-			top: 0px;
-			left: 0px;
-		}
 	</style>
 
 	<title>pi</title>
@@ -33,8 +27,6 @@
 <body>
   <div id="app" @keyup.enter="this.i = 0">
 		<a href="http://steamcommunity.com/profiles/76561197974957370">steam</a> / {{ pi }}
-
-		<div id="pi" class="text-center">π</div>
 
 		<div class="fixed-bottom">{{ n }} / infinity, <small class="text-muted">pi = 48*arctan(1/18) + 32*arctan(1/57) - 20*arctan(1/239)</small></div>
   </div>
