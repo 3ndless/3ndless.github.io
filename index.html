@@ -1,0 +1,87 @@
+<!-- ~aty -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+	<style>
+		html, body {
+			background-color: black;
+			color: white;
+			font-family: monospace;
+		}
+
+		a { color: white; text-decoration: underline; }
+
+    #app {
+      margin: 0.5em 0 0 0.5em;
+    }
+
+		#pi {
+			font-size: 500px;
+			position: fixed;
+			top: 0px;
+			left: 0px;
+		}
+	</style>
+
+	<title>pi</title>
+</head>
+<body>
+  <div id="app" @keyup.enter="this.i = 0">
+		<a href="http://steamcommunity.com/profiles/76561197974957370">steam</a> / {{ pi }}
+
+		<div id="pi" class="text-center">π</div>
+
+		<div class="fixed-bottom">{{ n }} / infinity, <small class="text-muted">pi = 48*arctan(1/18) + 32*arctan(1/57) - 20*arctan(1/239)</small></div>
+  </div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue"></script>
+
+	<script src="BigMath.js"></script>
+
+  <script>
+		function PiEngine (formula) {
+				let sum = new BigReal ("0")
+				for (let i=0; i < formula.length; i += 2) {
+						let factor = formula[i]
+						let denom  = formula[i+1]
+						let term = BigReal_ArctanRecip (denom)
+						term = term.multiplyByInteger (factor)
+						sum = sum.add (term)
+				}
+				return sum
+		}
+
+		function CalculatePi (d) {
+				let numDigits = d
+				let numQuads = 3 + Math.floor((numDigits+3)/4)
+				BigMath_SetPrecision (numQuads)
+				let formula = [48, 18, 32, 57, -20, 239]
+				let pi = PiEngine (formula).toHtml()
+				return pi.slice(12, pi.length-13)
+		}
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+				n: 10,
+				i: 1
+			},
+			mounted() {
+				setInterval(() => { this.n += this.i }, 10)
+			},
+			computed: {
+				pi: function() {
+					let n = this.n
+					return CalculatePi(n)
+				}
+			}
+    })
+  </script>
+</body>
+</html>
